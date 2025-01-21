@@ -7,18 +7,22 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 void setupDI() {
-  // Register Dio instance
+  // Here i want to create a single instance of the dio and every thing the cubit need it  so i make the dio singltion 
   getIt.registerSingleton(Dio());
 
-  // Register ApiService
+  // then the api service 
   getIt.registerSingleton(ApiService());
 
-  // Register FetchProductRepoImp
+  // then the repo implementaton that the cubit use it 
   getIt.registerSingleton(FetchProductRepoImp(
     apiService: getIt<ApiService>(),
     dio: getIt<Dio>(),
   ));
 
-  // Register ProductsCubit
+  // then i created a factory of this cubit  
   getIt.registerFactory(() => ProductsCubit(getIt<FetchProductRepoImp>()));
+
+  // used singlton with dio api service and repo to create 1  instance of them among the app 
+  // but using factory to to create a  new instance of the registered type every time it is requested
+  // there is another type called  LazySingleton , the instance in this type only created with its needed other things like singlton 
 }
